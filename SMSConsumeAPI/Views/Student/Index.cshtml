@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Student>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+@{
+    ViewData["Title"] = "Fetching Data from Web API";
+}
+
+<h2>Students</h2>
+
+<p>
+    <a asp-action="AddStudent" class="btn btn-success">Add New Student</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>@Html.DisplayName("Id")</th>
+            <th>@Html.DisplayName("First Name")</th>
+            <th>@Html.DisplayName("Last Name")</th>
+            <th>@Html.DisplayName("Date of birth")</th>
+            <th>@Html.DisplayName("Email")</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var row in Model)
+        {
+            <tr>
+                <td>@row.ID</td>
+                <td>@row.FirstName</td>
+                <td>@row.LastName</td>
+                <td>@row.DateofBirth.ToShortDateString()</td>
+                <td>@row.Email</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@row.ID" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@row.ID"
+                       onclick="return confirm('Are you sure you want to delete this student?');"
+                       class="btn btn-danger btn-sm">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

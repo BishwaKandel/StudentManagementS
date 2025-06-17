@@ -1,0 +1,36 @@
+﻿@model SMSConsumeAPI.Models.Enrollment
+
+@{
+    ViewData["Title"] = "Add Enrollment";
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+<h2>Add Enrollment</h2>
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<form asp-action="AddEnrollment" method="post">
+    <div class="form-group">
+        <label asp-for="StudentID" class="control-label"></label>
+        <input asp-for="StudentID" class="form-control" />
+        <span asp-validation-for="StudentID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CourseID" class="control-label">Course</label>
+        <select asp-for="CourseID" class="form-control" asp-items="ViewBag.Courses">
+            <option value="">-- Select Course --</option>
+        </select>
+        <span asp-validation-for="CourseID" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Enrollment</button>
+    <a asp-action="SelectStudent" class="btn btn-secondary">Cancel</a>
+</form>
+

@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36109.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentManagementSystemAPI", "StudentManagementSystemAPI.csproj", "{F221EFF4-3D3B-4C48-9D36-BC4699A40D41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMSConsumeAPI", "..\SMSConsumeAPI\SMSConsumeAPI.csproj", "{25B342C5-6C2F-45AF-8C1B-231475CC172E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F221EFF4-3D3B-4C48-9D36-BC4699A40D41} = {F221EFF4-3D3B-4C48-9D36-BC4699A40D41}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F221EFF4-3D3B-4C48-9D36-BC4699A40D41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F221EFF4-3D3B-4C48-9D36-BC4699A40D41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F221EFF4-3D3B-4C48-9D36-BC4699A40D41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F221EFF4-3D3B-4C48-9D36-BC4699A40D41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25B342C5-6C2F-45AF-8C1B-231475CC172E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25B342C5-6C2F-45AF-8C1B-231475CC172E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25B342C5-6C2F-45AF-8C1B-231475CC172E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25B342C5-6C2F-45AF-8C1B-231475CC172E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FC29E778-1EE4-43AD-BD7E-7FCAB0B3F54C}
+	EndGlobalSection
+EndGlobal

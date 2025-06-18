@@ -27,7 +27,8 @@ namespace StudentManagementSystemAPI.Controllers
             }
 
             var existingCourse = _context.Courses
-                .FirstOrDefault(c => c.Name.Equals(course.Name, StringComparison.OrdinalIgnoreCase));
+    .           FirstOrDefault(c => c.Name == course.Name);
+
 
             if (existingCourse != null)
             {

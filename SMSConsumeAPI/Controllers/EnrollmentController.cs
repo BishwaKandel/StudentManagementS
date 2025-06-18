@@ -43,6 +43,21 @@ namespace SMSConsumeAPI.Controllers
             return View(enrollments);
         }
 
+        private async Task PopulateCoursesDropdown()
+        {
+            HttpResponseMessage coursesResponse = await client.GetAsync("api/Courses");
+            if (coursesResponse.IsSuccessStatusCode)
+            {
+                var coursesJson = await coursesResponse.Content.ReadAsStringAsync();
+                var courses = JsonConvert.DeserializeObject<List<Course>>(coursesJson);
+                ViewBag.Courses = new SelectList(courses, "Id", "Name");
+            }
+            else
+            {
+                ViewBag.Courses = new SelectList(Enumerable.Empty<Course>(), "Id", "Name");
+            }
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> AddEnrollment(Enrollment enrollment)
@@ -54,6 +69,15 @@ namespace SMSConsumeAPI.Controllers
 
             if (!ModelState.IsValid)
             {
+                await PopulateCoursesDropdown();
+                return View(enrollment);
+            }
+
+            HttpResponseMessage studentResponse = await client.GetAsync($"api/Students/{enrollment.StudentID}");
+            if (!studentResponse.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError("StudentID", $"Student with ID {enrollment.StudentID} does not exist.");
+                await PopulateCoursesDropdown();
                 return View(enrollment);
             }
 
@@ -64,14 +88,7 @@ namespace SMSConsumeAPI.Controllers
                 if (!string.IsNullOrEmpty(duplicateResult))
                 {
                     ModelState.AddModelError(string.Empty, "The student is already enrolled in this course.");
-                    // Repopulate the courses dropdown
-                    HttpResponseMessage coursesResponse = await client.GetAsync("api/Courses");
-                    if (coursesResponse.IsSuccessStatusCode)
-                    {
-                        var coursesJson = await coursesResponse.Content.ReadAsStringAsync();
-                        var courses = JsonConvert.DeserializeObject<List<Course>>(coursesJson);
-                        ViewBag.Courses = new SelectList(courses, "Id", "Name");
-                    }
+                    await PopulateCoursesDropdown();
                     return View(enrollment);
                 }
             }
@@ -96,8 +113,10 @@ namespace SMSConsumeAPI.Controllers
                 ModelState.AddModelError(string.Empty, $"Error adding enrollment. Status: {response.StatusCode}, Error: {errorContent}");
             }
 
+            await PopulateCoursesDropdown();
             return View(enrollment);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> AddEnrollment()

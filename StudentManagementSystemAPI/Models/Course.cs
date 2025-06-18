@@ -13,7 +13,7 @@ namespace StudentManagementSystemAPI.Models
         [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
         public string Description { get; set; } = string.Empty;
 
-        // Navigation to Enrollment (1 Course -> many Enrollments)
+        // Navigation to Enrollment 
         public ICollection<Enrollment>? Enrollments { get; set; }
     }
 }

@@ -17,11 +17,11 @@ namespace StudentManagementSystemAPI.Models
         public int CourseID { get; set; }
 
         // Navigation Back to Student
-        [JsonIgnore] // To avoid circular reference during serialization
+        [JsonIgnore] 
         public Student Student { get; set; } = null!;
 
         // Navigation Back to Course
-        [JsonIgnore] // To avoid circular reference during serialization
+        [JsonIgnore] 
         public Course Course { get; set; } = null!;
 
         [JsonProperty("enrollmentDate")]

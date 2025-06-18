@@ -27,7 +27,7 @@ namespace StudentManagementSystemAPI.Controllers
             }
 
             var existingCourse = _context.Courses
-    .           FirstOrDefault(c => c.Name == course.Name);
+    .FirstOrDefault(c => c.Name == course.Name);
 
 
             if (existingCourse != null)
@@ -86,22 +86,24 @@ namespace StudentManagementSystemAPI.Controllers
                 return NotFound($"The course with ID {id} was not found.");
             }
 
-            if (_context.Courses.Any(c => c.Name.Equals(updatedCourse.Name, StringComparison.OrdinalIgnoreCase) && c.Id != id))
+            if (_context.Courses.Any(c => c.Name.ToLower() == updatedCourse.Name.ToLower() && c.Id != id))
             {
                 return Conflict($"A course with the name '{updatedCourse.Name}' already exists.");
             }
 
-            courseInDb.Name = updatedCourse.Name;
-            courseInDb.Description = updatedCourse.Description;
+            {
 
-            _context.SaveChanges();
+                courseInDb.Name = updatedCourse.Name;
+                courseInDb.Description = updatedCourse.Description;
 
-            return Ok(courseInDb);
+                _context.SaveChanges();
+
+                return Ok(courseInDb);
+            }
         }
 
-        // Delete Course
         [HttpDelete("{id}")]
-        public IActionResult DeleteCourses(int id)
+        private IActionResult DeleteCourses(int id)
         {
             var courseInDb = _context.Courses.Find(id);
 

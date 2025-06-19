@@ -4,8 +4,9 @@ using Newtonsoft.Json;
 
 namespace SMSConsumeAPI.DTO
 {
-    public class EnrollmentDisplayDTO
+    public class EnrollmentDisplayDTO  
     {
+        
         [Required(ErrorMessage = "Course ID is required")]
         public int CourseId { get; set; }
 

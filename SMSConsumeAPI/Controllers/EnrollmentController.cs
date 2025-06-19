@@ -42,14 +42,13 @@ namespace SMSConsumeAPI.Controllers
 
             return View(enrollments);
         }
-
         private async Task PopulateCoursesDropdown()
         {
-            HttpResponseMessage coursesResponse = await client.GetAsync("api/Courses");
-            if (coursesResponse.IsSuccessStatusCode)
+            HttpResponseMessage response = await client.GetAsync("api/Courses");
+            if (response.IsSuccessStatusCode)
             {
-                var coursesJson = await coursesResponse.Content.ReadAsStringAsync();
-                var courses = JsonConvert.DeserializeObject<List<Course>>(coursesJson);
+                var json = await response.Content.ReadAsStringAsync();
+                var courses = JsonConvert.DeserializeObject<List<Course>>(json);
                 ViewBag.Courses = new SelectList(courses, "Id", "Name");
             }
             else
@@ -57,6 +56,23 @@ namespace SMSConsumeAPI.Controllers
                 ViewBag.Courses = new SelectList(Enumerable.Empty<Course>(), "Id", "Name");
             }
         }
+
+        private async Task PopulateStudentDropdown()
+        {
+            HttpResponseMessage response = await client.GetAsync("api/Students");
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var students = JsonConvert.DeserializeObject<List<Student>>(json);
+                ViewBag.Students = new SelectList(students, "ID", "FirstName");
+            }
+            else
+            {
+                ViewBag.Students = new SelectList(Enumerable.Empty<Student>(), "ID", "FirstName");
+            }
+        }
+
+
 
 
         [HttpPost]
@@ -70,6 +86,7 @@ namespace SMSConsumeAPI.Controllers
             if (!ModelState.IsValid)
             {
                 await PopulateCoursesDropdown();
+                await PopulateStudentDropdown();
                 return View(enrollment);
             }
 
@@ -78,6 +95,7 @@ namespace SMSConsumeAPI.Controllers
             {
                 ModelState.AddModelError("StudentID", $"Student with ID {enrollment.StudentID} does not exist.");
                 await PopulateCoursesDropdown();
+                await PopulateStudentDropdown();
                 return View(enrollment);
             }
 
@@ -89,6 +107,7 @@ namespace SMSConsumeAPI.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "The student is already enrolled in this course.");
                     await PopulateCoursesDropdown();
+                    await PopulateStudentDropdown();
                     return View(enrollment);
                 }
             }
@@ -114,28 +133,15 @@ namespace SMSConsumeAPI.Controllers
             }
 
             await PopulateCoursesDropdown();
+            await PopulateStudentDropdown();
             return View(enrollment);
         }
-
 
         [HttpGet]
         public async Task<IActionResult> AddEnrollment()
         {
-            List<Course> courses = new List<Course>();
-            HttpResponseMessage response = await client.GetAsync("api/Courses");
-
-            if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                courses = JsonConvert.DeserializeObject<List<Course>>(json);
-                ViewBag.Courses = new SelectList(courses, "Id", "Name");
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Error fetching courses. Please try again.");
-                ViewBag.Courses = new SelectList(Enumerable.Empty<Course>(), "Id", "Name");
-            }
-
+            await PopulateCoursesDropdown();
+            await PopulateStudentDropdown();
             return View(new Enrollment());
         }
 
@@ -145,7 +151,7 @@ namespace SMSConsumeAPI.Controllers
         {
             List<Student> students = new List<Student>();
             HttpResponseMessage response = await client.GetAsync("api/Students");
-
+             
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();

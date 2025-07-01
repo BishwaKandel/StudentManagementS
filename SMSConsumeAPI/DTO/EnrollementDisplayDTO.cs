@@ -6,12 +6,21 @@ namespace SMSConsumeAPI.DTO
 {
     public class EnrollmentDisplayDTO  
     {
-        
+        public int StudentId { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public DateTime DateofBirth { get; set; }
+
+        public string Email { get; set; }
+
         [Required(ErrorMessage = "Course ID is required")]
         public int CourseId { get; set; }
 
         [Required(ErrorMessage = "Course name is required")]
-        public string CourseName { get; set; } = string.Empty;
+        public string CourseName { get; set; } 
 
         public string CourseDescription { get; set; } = string.Empty;
 

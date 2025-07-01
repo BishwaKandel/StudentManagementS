@@ -16,3 +16,4 @@ namespace StudentManagementSystemAPI.Models
         public DateTime EnrollmentDate { get; set; }
     }
 }
+ 

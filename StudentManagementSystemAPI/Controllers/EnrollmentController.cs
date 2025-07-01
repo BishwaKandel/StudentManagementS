@@ -52,11 +52,17 @@ namespace StudentManagementSystemAPI.Controllers
         [HttpGet("student/{studentId}")]
         public IActionResult GetCoursesByStudentId(int studentId)
         {
-            var courses = _context.Enrollments
+            var details = _context.Enrollments
                 .Where(e => e.StudentID == studentId)
-                .Include(e => e.Course) 
+                .Include(e => e.Course )
+                .Include( e=> e.Student) 
                 .Select(e => new
                 {
+                    StudentId = e.StudentID,
+                    FirstName = e.Student.FirstName,
+                    LastName = e.Student.LastName,
+                    DateofBirth = e.Student.DateofBirth,
+                    Email = e.Student.Email,
                     CourseId = e.CourseID,
                     CourseName = e.Course.Name,
                     CourseDescription = e.Course.Description,
@@ -64,12 +70,12 @@ namespace StudentManagementSystemAPI.Controllers
                 })
                 .ToList();
 
-            if (!courses.Any())
+            if (!details.Any())
             {
                 return NotFound($"No courses found for student ID {studentId}.");
             }
 
-            return Ok(courses);
+            return Ok(details);
         }
     }
 }

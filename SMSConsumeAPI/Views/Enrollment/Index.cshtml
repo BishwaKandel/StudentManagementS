@@ -10,6 +10,11 @@
 <table class="table">
     <thead>
         <tr>
+            <th>StudentID</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Date of Birth</th>
+            <th>Email</th>
             <th>Course ID</th>
             <th>Course Name</th>
             <th>Description</th>
@@ -20,6 +25,14 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>@item.StudentId</td>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>@item.DateofBirth</td>
+                <td>@item.Email</td>
+
+
+
                 <td>@item.CourseId</td>
                 <td>@item.CourseName</td>
                 <td>@item.CourseDescription</td>

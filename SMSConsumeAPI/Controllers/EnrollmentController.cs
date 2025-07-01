@@ -36,7 +36,7 @@ namespace SMSConsumeAPI.Controllers
             }
             else
             {
-                
+
                 ModelState.AddModelError(string.Empty, "Error fetching enrollments.");
             }
 
@@ -151,7 +151,7 @@ namespace SMSConsumeAPI.Controllers
         {
             List<Student> students = new List<Student>();
             HttpResponseMessage response = await client.GetAsync("api/Students");
-             
+
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
@@ -174,4 +174,3 @@ namespace SMSConsumeAPI.Controllers
 
 
 }
-

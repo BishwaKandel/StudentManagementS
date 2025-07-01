@@ -113,22 +113,39 @@ namespace SMSConsumeAPI.Controllers
             return View(student);
         }
 
-        //For Delete
+
+        // GET: Student/DeleteStudent/{id}
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            HttpResponseMessage response = await client.DeleteAsync($"api/Students/{id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Server error. Please try again later.");
-                    return RedirectToAction("Index");
-                }
+            HttpResponseMessage getData = await client.GetAsync($"api/Students/{id}");
+            if (getData.IsSuccessStatusCode)
+            {
+                string results = await getData.Content.ReadAsStringAsync();
+                Student student = JsonConvert.DeserializeObject<Student>(results);
+                return View(student);
+            }
 
+            return NotFound();
         }
+
+        //For Delete
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteStudentConfirmed(int id)
+        {
+            HttpResponseMessage response = await client.DeleteAsync($"api/Students/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("", "Failed to delete the student.");
+            return View();
+        }
+
+
     }
+
 }
 

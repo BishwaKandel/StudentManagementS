@@ -103,7 +103,7 @@ namespace StudentManagementSystemAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        private IActionResult DeleteCourses(int id)
+        public IActionResult DeleteCourses(int id)
         {
             var courseInDb = _context.Courses.Find(id);
 

@@ -28,10 +28,10 @@
         <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div> *@
-    <div>
+    <div class="form-group">
         <label asp-for="Email"></label>
         <input asp-for="Email" class="form-control" />
-        <div asp-validation-summary ="ModelOnly" class="text-danger"></div>
+        <span asp-validation-for="Email" class="text-danger"></span>
     </div>
     <button type="submit" class="btn btn-primary">Add Student</button>
     <a asp-controller="Student" asp-action ="index" class ="btn btn-primary">Back</a>

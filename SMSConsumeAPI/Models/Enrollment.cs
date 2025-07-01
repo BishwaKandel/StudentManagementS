@@ -8,7 +8,7 @@ namespace SMSConsumeAPI.Models
         public int Id { get; set; }
 
         // StudentID - Foreign Key from Student ; 1-M relationship
-        [Required(ErrorMessage = "Student ID is required")]
+        [Required(ErrorMessage = "Please select a student.")]
         public int StudentID { get; set; }
 
         // CourseID - Foreign Key from Course ; 1-M Relationship

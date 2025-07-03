@@ -1,5 +1,5 @@
-﻿﻿@using SMSConsumeAPI.DTO
-@model List<SMSConsumeAPI.DTO.EnrollmentDisplayDTO>
+﻿﻿@using SMSConsumeAPI.ViewModel
+@model List<SMSConsumeAPI.ViewModel.EnrollmentDisplay>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
@@ -41,3 +41,4 @@
         }
     </tbody>
 </table>
+<a asp-action="SelectStudent" class="btn btn-secondary">Back</a>

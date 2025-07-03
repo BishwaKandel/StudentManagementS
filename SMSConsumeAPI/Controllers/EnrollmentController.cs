@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using SMSConsumeAPI.DTO;
+using SMSConsumeAPI.ViewModel;
 using SMSConsumeAPI.Models;
 using System.Data;
 using System.Diagnostics;
@@ -26,13 +26,13 @@ namespace SMSConsumeAPI.Controllers
                 return BadRequest("StudentId is required");
             }
 
-            List<EnrollmentDisplayDTO> enrollments = new List<EnrollmentDisplayDTO>();
+            List<EnrollmentDisplay> enrollments = new List<EnrollmentDisplay>();
             HttpResponseMessage response = await client.GetAsync($"api/Enrollment/student/{studentId.Value}");
 
             if (response.IsSuccessStatusCode)
             {
                 string json = await response.Content.ReadAsStringAsync();
-                enrollments = JsonConvert.DeserializeObject<List<EnrollmentDisplayDTO>>(json);
+                enrollments = JsonConvert.DeserializeObject<List<EnrollmentDisplay>>(json);
             }
             else
             {

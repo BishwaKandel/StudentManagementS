@@ -77,5 +77,37 @@ namespace StudentManagementSystemAPI.Controllers
 
             return Ok(details);
         }
+
+        // Get all students enrolled in a course
+
+        [HttpGet("course/{courseId}/students")]
+        public IActionResult GetStudentsByCourseId(int courseId)
+        {
+            var details = _context.Enrollments
+                .Where(e => e.CourseID == courseId)
+                .Include(e => e.Student)
+                .Include(e => e.Course)
+                .Select(e => new
+                {
+                    CourseId = e.CourseID,
+                    CourseName = e.Course.Name,
+                    CourseDescription = e.Course.Description,
+                    StudentId = e.StudentID,
+                    FirstName = e.Student.FirstName,
+                    LastName = e.Student.LastName,
+                    DateOfBirth = e.Student.DateofBirth,
+                    Email = e.Student.Email,
+                    EnrollmentDate = e.EnrollmentDate
+                })
+                .ToList();
+
+            if (!details.Any())
+            {
+                return NotFound($"No students found for course ID {courseId}.");
+            }
+
+            return Ok(details);
+        }
+
     }
 }

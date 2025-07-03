@@ -1,10 +1,4 @@
-﻿@model SMSConsumeAPI.Models.Student
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+﻿@model SMSConsumeAPI.Models.ViewModels.StudentDeleteViewModel
 
 @{
     ViewData["Title"] = "Delete Student";
@@ -13,70 +7,52 @@
 <h2>Are you sure you want to delete this Student?</h2>
 
 <div>
-    <h4>Student</h4>
+    <h4>Student Details</h4>
     <hr />
     <dl class="row">
-        <dt class="col-sm-2">
-            FirstName
-        </dt>
-        <dd class="col-sm-10">
-            @Model.FirstName
-        </dd>
-        <dt class="col-sm-2">
-            LastName
-        </dt>
-        <dd class="col-sm-10">
-            @Model.LastName
-        </dd>
-        <dt class="col-sm-2">
-            Date of Birth
-        </dt>
-        <dd class="col-sm-10">
-            @Model.DateofBirth
-        </dd>
-        <dt class="col-sm-2">
-            Email
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Email
-        </dd>
+        <dt class="col-sm-2">First Name</dt>
+        <dd class="col-sm-10">@Model.FirstName</dd>
+
+        <dt class="col-sm-2">Last Name</dt>
+        <dd class="col-sm-10">@Model.LastName</dd>
+
+        <dt class="col-sm-2">Date of Birth</dt>
+        <dd class="col-sm-10">@Model.DateofBirth.ToShortDateString()</dd>
+
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10">@Model.Email</dd>
     </dl>
-    <h3>Deleting the Student will result in deletion of following enrollments as well : </h3>
-    <div>
-        <h4>Enrollment</h4>
-        <hr />
-        <dl class="row">
-            <dt class="col-sm-2">
-                Course
-            </dt>
-            <dd class="col-sm-10">
-                @Model
-            </dd>
-            <dt class="col-sm-2">
-                LastName
-            </dt>
-            <dd class="col-sm-10">
-                @Model.LastName
-            </dd>
-            <dt class="col-sm-2">
-                Date of Birth
-            </dt>
-            <dd class="col-sm-10">
-                @Model.DateofBirth
-            </dd>
-            <dt class="col-sm-2">
-                Email
-            </dt>
-            <dd class="col-sm-10">
-                @Model.Email
-            </dd>
-        </dl>
 
-
-
-    <form asp-action="Delete" method="post">
-        <input type="hidden" asp-for="ID" />
-        <button type="submit" class="btn btn-danger">Delete</button>
-        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-    </form>
+    <h4>Deleting this student will also remove all enrollments in these courses </h4>
+    <hr />
+    @if (Model.Enrollments != null && Model.Enrollments.Any())
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Course Name</th>
+                    <th>Enrollment Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var enrollment in Model.Enrollments)
+                {
+                    <tr>
+                        <td>@enrollment.CourseName</td>
+                        <td>@enrollment.EnrollmentDate.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>This student has no enrollments.</p>
+    }
 </div>
+<form asp-action="Delete" method="post">
+    <input type="hidden" name="id" value="@Model.StudentId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+

@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SMSConsumeAPI.Models;
+using SMSConsumeAPI.Models.ViewModels;
+using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace SMSConsumeAPI.Controllers
 {
@@ -136,15 +137,30 @@ namespace SMSConsumeAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> DeleteCourse(int id)
         {
-            HttpResponseMessage getData = await client.GetAsync($"api/Courses/{id}");
-            if (getData.IsSuccessStatusCode)
+            var viewModel = new CourseDeleteViewModel();
+
+            // Get Student
+            var courseResponse = await client.GetAsync($"api/Courses/{id}");
+            if (!courseResponse.IsSuccessStatusCode)
+                return NotFound();
+
+            var courseJson = await courseResponse.Content.ReadAsStringAsync();
+            var course = JsonConvert.DeserializeObject<Course>(courseJson);
+
+            viewModel.Id = course.Id;
+            viewModel.Name = course.Name;
+            viewModel.Description = course.Description; 
+
+            // Get Students
+            var enrollmentResponse = await client.GetAsync($"api/Enrollment/course/{id}/students");
+            if (enrollmentResponse.IsSuccessStatusCode)
             {
-                string results = await getData.Content.ReadAsStringAsync();
-                Course course = JsonConvert.DeserializeObject<Course>(results);
-                return View(course);
+                var enrollmentsJson = await enrollmentResponse.Content.ReadAsStringAsync();
+                var enrollmentVMs = JsonConvert.DeserializeObject<List<EnrollmentStudentViewModel>>(enrollmentsJson);
+                viewModel.Enrollments = enrollmentVMs ?? new List<EnrollmentStudentViewModel>();
             }
 
-            return NotFound();
+            return View(viewModel);
         }
 
         // POST: Course/DeleteCourse/{id}

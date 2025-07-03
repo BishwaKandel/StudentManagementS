@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SMSConsumeAPI.Models;
+using SMSConsumeAPI.Models.DTO;
+using SMSConsumeAPI.Models.ViewModels;
 using System.Data;
 using System.Diagnostics;
 using System.Net.Http;
@@ -118,16 +120,34 @@ namespace SMSConsumeAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            HttpResponseMessage getData = await client.GetAsync($"api/Students/{id}");
-            if (getData.IsSuccessStatusCode)
+            var viewModel = new StudentDeleteViewModel();
+
+            // Get Student
+            var studentResponse = await client.GetAsync($"api/Students/{id}");
+            if (!studentResponse.IsSuccessStatusCode)
+                return NotFound();
+
+            var studentJson = await studentResponse.Content.ReadAsStringAsync();
+            var student = JsonConvert.DeserializeObject<Student>(studentJson);
+
+            viewModel.StudentId = student.ID;
+            viewModel.FirstName = student.FirstName;
+            viewModel.LastName = student.LastName;
+            viewModel.Email = student.Email;
+            viewModel.DateofBirth = student.DateofBirth;
+
+            // Get Enrollments 
+            var enrollmentResponse = await client.GetAsync($"api/Enrollment/student/{id}");
+            if (enrollmentResponse.IsSuccessStatusCode)
             {
-                string results = await getData.Content.ReadAsStringAsync();
-                Student student = JsonConvert.DeserializeObject<Student>(results);
-                return View(student);
+                var enrollmentsJson = await enrollmentResponse.Content.ReadAsStringAsync();
+                var enrollmentVMs = JsonConvert.DeserializeObject<List<EnrollmentDisplayViewModel>>(enrollmentsJson);
+                viewModel.Enrollments = enrollmentVMs ?? new List<EnrollmentDisplayViewModel>();
             }
 
-            return NotFound();
+            return View(viewModel);
         }
+
 
         //For Delete
         [HttpPost, ActionName("Delete")]
@@ -139,7 +159,6 @@ namespace SMSConsumeAPI.Controllers
             {
                 return RedirectToAction("Index");
             }
-
             ModelState.AddModelError("", "Failed to delete the student.");
             return View();
         }

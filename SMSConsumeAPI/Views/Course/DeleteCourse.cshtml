@@ -1,4 +1,4 @@
-﻿@model SMSConsumeAPI.Models.Course
+﻿@model SMSConsumeAPI.Models.ViewModels.CourseDeleteViewModel
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
@@ -28,6 +28,43 @@
             @Model.Description
         </dd>
     </dl>
+
+    <h4>Deleting this course will also remove all student enrollments associated with it: </h4>
+    <hr />
+    @if (Model.Enrollments != null && Model.Enrollments.Any())
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>StudentID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email </th>
+                    <th>DOB</th>
+                    <th>Enrollment Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var enrollment in Model.Enrollments)
+                {
+                    <tr>
+                        <td>@enrollment.StudentId</td>
+                        <td>@enrollment.FirstName</td>
+                        <td>@enrollment.LastName</td>
+                        <td>@enrollment.Email</td>
+                        <td>@enrollment.DateofBirth.ToShortDateString()</td>
+                        <td>@enrollment.EnrollmentDate.ToShortDateString()</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>This course has no enrollments.</p>
+    }
+</div>
 
     <form asp-action="DeleteCourse" method="post">
         <input type="hidden" asp-for="Id" />

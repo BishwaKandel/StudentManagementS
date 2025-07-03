@@ -1,11 +1,11 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace SMSConsumeAPI.DTO
+namespace SMSConsumeAPI.ViewModel
 {
-    public class EnrollmentDisplayDTO  
+    public class EnrollmentDisplay
     {
+
         public int StudentId { get; set; }
 
         public string FirstName { get; set; }
@@ -20,10 +20,12 @@ namespace SMSConsumeAPI.DTO
         public int CourseId { get; set; }
 
         [Required(ErrorMessage = "Course name is required")]
-        public string CourseName { get; set; } 
+        public string CourseName { get; set; }
 
         public string CourseDescription { get; set; } = string.Empty;
 
         public DateTime EnrollmentDate { get; set; }
+
     }
 }
+
